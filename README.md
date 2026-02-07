@@ -49,6 +49,11 @@ Browse and install scripts through ReaPack's interface. Most scripts are organiz
 
 **Note**: The ReaDrum Machine script will automatically prompt you to add missing dependencies on first run if needed.
 
+
+### Adding a new script to a repository and wanna make it show up as an action in REAPER?
+
+Make sure it is included in index.xml!
+
 ---
 
 ## Repository Overview

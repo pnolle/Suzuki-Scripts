@@ -1,7 +1,7 @@
 -- @description Suzuki ReaDrum Machine (Configurable Layout)
 -- @author Suzuki
 -- @license GPL v3
--- @version 1.7.6
+-- @version 1.7.7
 -- @noindex
 -- @changelog
 --   + new script with LayoutManager and configurable layout

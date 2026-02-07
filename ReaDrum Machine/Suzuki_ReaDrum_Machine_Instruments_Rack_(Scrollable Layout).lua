@@ -1,7 +1,7 @@
 -- @description Suzuki ReaDrum Machine (Scrollable Layout)
 -- @author Suzuki
 -- @license GPL v3
--- @version 1.7.6
+-- @version 1.7.7
 -- @noindex
 -- @changelog
 --   + Add paste action. Click a pad and Ctrl for windows (cmd for mac) + V pastes a sample file from the clipboard.
