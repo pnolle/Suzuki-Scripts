@@ -46,18 +46,14 @@ function LayoutManager_LoadLayouts()
     return nil, "ERROR: Layout config file not found at " .. LAYOUT_CONFIG_FILE
   end
   
-  r.ShowConsoleMsg("[LayoutManager] Loading layouts from: " .. LAYOUT_CONFIG_FILE .. "\n")
-  
   local status, layouts_data = pcall(function()
     return dofile(LAYOUT_CONFIG_FILE)
   end)
   
   if not status then
-    r.ShowConsoleMsg("[LayoutManager] ERROR loading layouts: " .. tostring(layouts_data) .. "\n")
     return nil, "ERROR: Failed to load layouts.lua\n\nDetails: " .. tostring(layouts_data) .. "\n\nFile: " .. LAYOUT_CONFIG_FILE
   end
   
-  r.ShowConsoleMsg("[LayoutManager] Layouts loaded successfully! Found " .. (layouts_data.layouts and tablelength(layouts_data.layouts) or 0) .. " layouts\n")
   return layouts_data, nil
 end
 
@@ -162,7 +158,7 @@ function LayoutManager_GetLayoutForTrack(track_obj)
   if not layout_id or layout_id == "" then
     return nil  -- Use default
   end
-  r.ShowConsoleMsg("[GetLayout] Reading " .. track_guid .. " -> layout: " .. tostring(layout_id) .. "\n")
+  -- r.ShowConsoleMsg("[GetLayout] Reading " .. track_guid .. " -> layout: " .. tostring(layout_id) .. "\n")
   return layout_id
 end
 
@@ -175,7 +171,7 @@ function LayoutManager_SetLayoutForTrack(track_obj, layout_id)
   
   layout_state_cache[track_guid] = layout_id
   local success = SaveLayoutState(layout_state_cache)
-  r.ShowConsoleMsg("[SetLayout] Set " .. track_guid .. " to layout: " .. tostring(layout_id) .. "\n")
+  -- r.ShowConsoleMsg("[SetLayout] Set " .. track_guid .. " to layout: " .. tostring(layout_id) .. "\n")
   
   return success
 end
@@ -291,20 +287,13 @@ function LayoutManager_GetPadPosition(pad_idx, layout, start_x, start_y, pad_w, 
   local col, row = LayoutManager_GetGridPositionForPad(pad_idx, layout)
   
   if not col or not row then
-    if pad_idx == 0 then
-      r.ShowConsoleMsg("[GetPadPosition] Pad " .. pad_idx .. " NOT found in layout grid\n")
-    end
     return nil, nil
   end
   
   -- Calculate screen position based on grid position
   local x = start_x + (col - 1) * (pad_w + spacing)
   local y = start_y + (row - 1) * -(pad_h + spacing)
-  
-  if pad_idx == 0 then
-    r.ShowConsoleMsg("[GetPadPosition] Pad " .. pad_idx .. " at grid[" .. row .. "][" .. col .. "] -> x=" .. x .. " y=" .. y .. "\n")
-  end
-  
+    
   return x, y
 end
 

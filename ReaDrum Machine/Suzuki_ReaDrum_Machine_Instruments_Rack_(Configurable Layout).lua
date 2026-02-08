@@ -52,7 +52,6 @@ package.path                 = debug.getinfo(1, "S").source:match [[^@?(.*[\/])[
     "?.lua;" -- GET DIRECTORY FOR REQUIRE
 
 script_path = r.GetResourcePath() .. "/Scripts/Suzuki Scripts/ReaDrum Machine/"
-r.ShowConsoleMsg("[Init] script_path = " .. script_path .. "\n")
 
 --[[local profiler = dofile(r.GetResourcePath() ..
   '/Scripts/ReaTeam Scripts/Development/cfillion_Lua profiler.lua')
@@ -74,7 +73,6 @@ COLOR                        = {
 --- PRE-REQUISITES ---
 local function ThirdPartyDeps() -- FX Browser
   local version = tonumber(string.sub(r.GetAppVersion(), 0, 4))
-  --reaper.ShowConsoleMsg((version))
 
   local midi_trigger_envelope = r.GetResourcePath() ..
       "/Effects/Suzuki Scripts/lewloiwc's Sound Design Suite/lewloiwc_midi_trigger_envelope.jsfx"
@@ -186,12 +184,12 @@ require("Modules/Pad Actions")
 -- Load and validate layouts
 layouts_data, layouts_error = LayoutManager_LoadLayouts()
 if layouts_error then
-  r.ShowConsoleMsg("ReaDrum Machine - Layout System: " .. layouts_error .. "\n")
+  -- r.ShowConsoleMsg("ReaDrum Machine - Layout System: " .. layouts_error .. "\n")
 else
   local all_errors = LayoutManager_ValidateAll(layouts_data)
   if #all_errors > 0 then
     local error_msg = "ReaDrum Machine - Layout Validation Errors:\n\n" .. table.concat(all_errors, "\n\n")
-    r.ShowConsoleMsg(error_msg .. "\n\n(Copy errors above and paste into a text editor for easier viewing)\n")
+    -- r.ShowConsoleMsg(error_msg .. "\n\n(Copy errors above and paste into a text editor for easier viewing)\n")
   end
 end
 
@@ -352,11 +350,9 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
 
     -- Play button
     im.SetCursorPos(ctx, x, y + pad_height + 5)
-    if im.InvisibleButton(ctx, "▶##play" .. a, pad_width / 3, 25) then
-      -- Convert MIDI note to pad array index (note + 1)
-      a = notenum + 1
-      SendMidiNote(a)
-    end
+    im.InvisibleButton(ctx, "▶##play" .. a, pad_width / 3, 25)  -- im.InvisibleButton returns true when clicked THIS FRAME, false otherwise
+    
+    SendMidiNote(a)  -- is always executed but checks for mouse clicks internally
     DrawListButton("-", COLOR["n"], nil, true)
 
     -- Solo button
@@ -538,8 +534,6 @@ function DrawPads(loopmin, loopmax)
     pad_h = 50
   end
   
-  -- r.ShowConsoleMsg("[DrawPads] Called with loopmin=" .. loopmin .. " loopmax=" .. loopmax .. " layout=" .. (current_layout and (current_layout.cols .. "x" .. current_layout.rows) or "nil") .. " octave=" .. octave_offset .. "\n")
-
   -- Render pads in the requested range, arranged by layout grid if available
   local pad_idx = loopmin
   
@@ -560,7 +554,6 @@ function DrawPads(loopmin, loopmax)
           -- Skip if exceeds MIDI range
           if final_midi < 0 or final_midi > 127 then
             if pad_idx == loopmin then
-              r.ShowConsoleMsg("[DrawPads] Skipping pad " .. pad_idx .. ": relative_note=" .. relative_note .. " would be MIDI " .. final_midi .. " (out of range)\n")
             end
             pad_idx = pad_idx + 1
             goto continue_loop
@@ -677,10 +670,8 @@ function RenderOctaveButtons(start_x)
     
     -- Handle button click - change displayed octave
     if rv then
-      r.ShowConsoleMsg("[btn click] 1 " .. LAST_MENU .. "=" .. octave .. "\n")
       LAST_MENU = octave
       r.SetProjExtState(0, "ReaDrum Machine", track_guid .. "LAST_MENU", tostring(octave))
-      r.ShowConsoleMsg("[btn click] 2 " .. LAST_MENU .. "=" .. octave .. "\n")
     end
     
     -- Drag & drop support
@@ -778,12 +769,12 @@ function Run()
 
     -- Detect track change and update cache with new track's layout
     if track_guid ~= cache_track_guid then
-      r.ShowConsoleMsg("[Run] track_guid ~= cache_track_guid\n")
+      -- r.ShowConsoleMsg("[Run] track_guid ~= cache_track_guid\n")
       cache_track_guid = track_guid
       cache_fx_count = nil           -- Reset FX count on track change
       
       -- Load layout ID from ext state at track change (only place we call LayoutManager_GetLayoutForTrack)
-      r.ShowConsoleMsg("[Run] LayoutManager_GetLayoutForTrack(track)\n", track)
+      -- r.ShowConsoleMsg("[Run] LayoutManager_GetLayoutForTrack(track)\n", track)
       cache_layout_id = LayoutManager_GetLayoutForTrack(track) or layouts_data.defaultLayout
       cache_current_layout = layouts_data.layouts[cache_layout_id]
       
@@ -793,7 +784,7 @@ function Run()
     
     -- If layout cache was invalidated (e.g., user changed layout in menu), reload it
     if cache_layout_id == nil and track_guid then
-      r.ShowConsoleMsg("[Run] Layout cache invalidated, reloading layout\n")
+      -- r.ShowConsoleMsg("[Run] Layout cache invalidated, reloading layout\n")
       cache_layout_id = LayoutManager_GetLayoutForTrack(track) or layouts_data.defaultLayout
       cache_current_layout = layouts_data.layouts[cache_layout_id]
     end
