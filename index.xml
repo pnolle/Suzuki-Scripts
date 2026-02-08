@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Suzuki Scripts" commit="e0d1db848276c98553c71f8f8df86d9168716c66">
+<index version="1" name="Suzuki Scripts" commit="0d82624063640bceb92100fe12f60d2f8cd5bcec">
   <category name="Development">
     <reapack name="Suzuki_Check stereo channels input bitmask for last touched track or take FX (inside Container).lua" type="script" desc="Check stereo channels input bitmask for last touched track or take FX (inside Container)">
       <metadata>
@@ -2326,7 +2326,17 @@ Installation Guide
 {\pard \ql \f0 \sa180 \li0 \fi0 Browse and install scripts through ReaPack's interface. Most scripts are organized by category (Development, FX, Track, etc.).\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 {\b Note}: The ReaDrum Machine script will automatically prompt you to add missing dependencies on first run if needed.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel2 \b \fs28 Adding a new script to a repository and wanna make it show up as an action in REAPER?\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Make sure it is included in index.xml!\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Make sure it is included in {\f1 index.xml} in your latest {\f1 version} within the {\f1 reapack} tag.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab -- @noindex in header of the script\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab This directive tells REAPER not to index the script itself as an independent action.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Typically, a script with -- @noindex won\u8217't appear in the main Actions list.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab It\u8217's mainly used for helper scripts, libraries, or scripts that are only meant to be called by other scripts.\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab -- @provides in header of the main script\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab This directive is used in a main script to declare that it "provides" other scripts or files.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab It tells REAPER (and package managers like ReaPack) that the main script depends on or includes these additional files.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab The files listed under -- @provides are usually helper scripts or libraries that the main script calls or loads.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab These provided scripts can have -- @noindex themselves to avoid cluttering the Actions list.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Still, this might not work or not properly refresh, even after REAPER restart. In that case, {\f1 Show Actions list} => {\f1 New action} => {\f1 Load ReaScript} to choose the file from your hard drive. After that, it's in the list.\par}
 {\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Repository Overview\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 This repository contains multiple script collections distributed through ReaPack. Here's what's included:\par}
