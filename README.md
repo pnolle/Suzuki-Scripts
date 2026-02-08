@@ -52,7 +52,22 @@ Browse and install scripts through ReaPack's interface. Most scripts are organiz
 
 ### Adding a new script to a repository and wanna make it show up as an action in REAPER?
 
-Make sure it is included in index.xml!
+Make sure it is included in ``index.xml`` in your latest ``version`` within the ``reapack`` tag.
+
+1. -- @noindex in header of the script
+
+* This directive tells REAPER not to index the script itself as an independent action.
+* Typically, a script with -- @noindex won’t appear in the main Actions list.
+* It’s mainly used for helper scripts, libraries, or scripts that are only meant to be called by other scripts.
+
+2. -- @provides in header of the main script
+
+* This directive is used in a main script to declare that it "provides" other scripts or files.
+* It tells REAPER (and package managers like ReaPack) that the main script depends on or includes these additional files.
+* The files listed under -- @provides are usually helper scripts or libraries that the main script calls or loads.
+* These provided scripts can have -- @noindex themselves to avoid cluttering the Actions list.
+
+Still, this might not work or not properly refresh, even after REAPER restart. In that case, ``Show Actions list`` => ``New action`` => ``Load ReaScript`` to choose the file from your hard drive. After that, it's in the list.
 
 ---
 
