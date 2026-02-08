@@ -328,6 +328,7 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
   if Pad[a] then
     DndAddFX_TARGET(a)
     DndAddSample_TARGET(a)
+    UpdatePadID()
     DndMoveFX_TARGET_SWAP(a)
     PadMenu(a, LayoutManager_GetNoteName(note_num, GetCurrentLayout()))
     
@@ -379,6 +380,7 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
       OnPad = true
     end
     DndAddSample_TARGET(a)
+    UpdatePadID()
   end
 end
 
