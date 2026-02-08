@@ -2,7 +2,6 @@
 -- @author Suzuki
 -- @license GPL v3
 -- @version 1.7.7
--- @noindex
 -- @changelog
 --   + new script with LayoutManager and configurable layout
 -- @link https://forum.cockos.com/showthread.php?t=284566
