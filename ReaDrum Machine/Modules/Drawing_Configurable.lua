@@ -995,7 +995,7 @@ function CustomTitleBar(button_pos)
       
       for _, layout_info in ipairs(available_layouts) do
         if im.Selectable(ctx, layout_info.name, layout_info.id == cache_layout_id) then
-          r.ShowConsoleMsg("[MenuAction] User selected layout: " .. layout_info.name .. " (ID: " .. layout_info.id .. ")\n")
+          -- r.ShowConsoleMsg("[MenuAction] User selected layout: " .. layout_info.name .. " (ID: " .. layout_info.id .. ")\n")
           LayoutManager_SetLayoutForTrack(track, layout_info.id)
           InvalidateLayoutCache()  -- Force redraw with new layout on next frame
         end
