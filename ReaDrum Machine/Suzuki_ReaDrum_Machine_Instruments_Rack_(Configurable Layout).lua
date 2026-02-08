@@ -313,6 +313,7 @@ end
 function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height)
   local a = pad_idx
   notenum = note_num  -- Set as GLOBAL for use in DndAddSample_TARGET and other functions
+  note_name = getNoteName(note_num + midi_oct_offs)  -- Set as GLOBAL for drag-drop functions
   
   im.SetCursorPos(ctx, x, y)
   local ret = im.InvisibleButton(ctx, pad_label .. "##" .. a, pad_width, pad_height)
@@ -379,7 +380,10 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
     if im.IsItemHovered(ctx) then
       OnPad = true
     end
+    -- Drag-drop targets must be registered for all pads (empty and full)
+    DndAddFX_TARGET(a)
     DndAddSample_TARGET(a)
+    DndMoveFX_TARGET_SWAP(a)
     UpdatePadID()
   end
 end
