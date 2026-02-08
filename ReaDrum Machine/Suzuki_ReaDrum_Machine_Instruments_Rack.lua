@@ -41,6 +41,7 @@
 --   Modules/*.lua
 --   [effect] JSFX/*.jsfx
 --   [main] Suzuki_ReaDrum_Machine_Instruments_Rack_(Scrollable Layout).lua
+--   [main] Suzuki_ReaDrum_Machine_Instruments_Rack_(Configurable Layout).lua
 --   [main] Scripts/*.lua
 
 r                      = reaper
