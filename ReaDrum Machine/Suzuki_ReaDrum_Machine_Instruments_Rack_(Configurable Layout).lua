@@ -729,8 +729,10 @@ function Main()
   f_draw_list = im.GetForegroundDrawList(ctx)
 
   local x, y = im.GetCursorPos(ctx)
+  local window_width = im.GetWindowWidth(ctx) or 450
+  local window_height = im.GetWindowHeight(ctx) or 360
 
-  if im.BeginChild(ctx, 'BUTTON_SECTION', w_closed + 10, h + 100) then
+  if im.BeginChild(ctx, 'BUTTON_SECTION', w_closed + 10, window_height - 20) then
     -- Call new RenderOctaveButtons function
     -- ImGui will handle scrolling automatically with sequential layout
     RenderOctaveButtons(0)
@@ -740,7 +742,8 @@ function Main()
   local openpad
   if LAST_MENU ~= nil then
     im.SetCursorPos(ctx, x + w_closed, y)
-    if im.BeginChild(ctx, "child_menu", w_open + 135, h + 88) then
+    local pad_menu_width = math.max(w_open + 135, window_width - w_closed - 30)
+    if im.BeginChild(ctx, "child_menu", pad_menu_width, window_height - 20) then
       -- Get layout dimensions to calculate loopmax
       local current_layout = GetCurrentLayout()
       local loopmax = 1
@@ -758,7 +761,8 @@ function Main()
     im.SetCursorPos(ctx, 40, 0)
     OpenRS5kInsidePad(OPEN_PAD, 0)
   end
-  im.Dummy(ctx, w_closed + 10, h + 100)
+  -- Dummy to account for SetCursorPos() calls that extend group boundaries
+  im.Dummy(ctx, window_width, window_height)
   im.EndGroup(ctx)
   im.PopStyleColor(ctx)
 end
