@@ -4,12 +4,43 @@ Comprehensive collection of REAPER Lua scripts for advanced workflow automation,
 
 ## 📋 Table of Contents
 
-1. [Installation](#installation)
-2. [Repository Overview](#repository-overview)
-3. [ReaDrum Machine](#readrum-machine)
-4. [Additional Script Collections](#additional-script-collections)
-5. [Dependencies](#dependencies)
-6. [Support](#support)
+- [Suzuki Scripts Repository](#suzuki-scripts-repository)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Add Repositories to ReaPack](#add-repositories-to-reapack)
+    - [Install Individual Scripts](#install-individual-scripts)
+    - [Adding a new script to a repository and wanna make it show up as an action in REAPER?](#adding-a-new-script-to-a-repository-and-wanna-make-it-show-up-as-an-action-in-reaper)
+  - [Repository Overview](#repository-overview)
+    - [**ReaDrum Machine** ⭐ (Main Project)](#readrum-machine--main-project)
+    - [**FX Scripts** (30+ scripts)](#fx-scripts-30-scripts)
+    - [**Development Scripts** (2 scripts)](#development-scripts-2-scripts)
+    - [**Envelopes** (1 script)](#envelopes-1-script)
+    - [**Modulation** (6 scripts)](#modulation-6-scripts)
+    - [**Track / Track Template Shortcut Generator**](#track--track-template-shortcut-generator)
+    - [**lewloiwc's Sound Design Suite \& Splitter Suite**](#lewloiwcs-sound-design-suite--splitter-suite)
+    - [**FXChain / FX Devices**](#fxchain--fx-devices)
+  - [ReaDrum Machine](#readrum-machine)
+    - [What is it?](#what-is-it)
+    - [How to use](#how-to-use)
+    - [Key Files](#key-files)
+    - [Data Storage](#data-storage)
+      - [Sample Assignments \& Pad Data Hierarchy](#sample-assignments--pad-data-hierarchy)
+      - [Summary](#summary)
+      - [How REAPER Identifies Executable Scripts](#how-reaper-identifies-executable-scripts)
+    - [UI Code Structure](#ui-code-structure)
+    - [Architecture](#architecture)
+    - [Configurable device layout](#configurable-device-layout)
+      - [Concept prompts](#concept-prompts)
+  - [Dependencies](#dependencies)
+    - [Required for ReaDrum Machine](#required-for-readrum-machine)
+    - [Optional](#optional)
+    - [What is Sexan's FX Browser Parser?](#what-is-sexans-fx-browser-parser)
+  - [Support](#support)
+    - [Forum Thread](#forum-thread)
+    - [Screenshots](#screenshots)
+    - [Enhanced Experience](#enhanced-experience)
+
 
 ## Installation
 
@@ -130,14 +161,15 @@ ReaDrum Machine is a Lua script that transforms REAPER into a powerful beat-maki
 
 📖 **[Full Manual](ReaDrum%20Machine/ReaDrumMachine_Manual.md)** — see for detailed usage instructions
 
-### Screenshots
-![Workflow](https://i.imgur.com/A3vDxxT.gif)
-![UI](https://i.imgur.com/WHT5b6k.png)
-![Integration](https://imgur.com/6z9BPOS.gif)
 
-### Enhanced Experience
-For a Bitwig Drum Machine-style interface, check out [FX Devices](https://github.com/BryanChi/BryanChi-FX-Devices)
-![FX Devices](https://imgur.com/fP72RYB.png)
+### How to use
+
+| Action | How to |
+| - | - |
+| Add sample | Drag & drop sample file on pad |
+| Remove sample | alt + click on pad<br>Mac: opt + click |
+| Multi-select pads | ctrl + click on pad<br>Mac: cmd + click |
+
 
 ### Key Files
 - **Main Script**: `Suzuki_ReaDrum_Machine_Instruments_Rack.lua`
@@ -291,3 +323,14 @@ If you find these scripts useful, please consider supporting the developer:
 ### Forum Thread
 For discussions, feature requests, and bug reports:
 [REAPER Forum - ReaDrum Machine](https://forum.cockos.com/showthread.php?t=284566)
+
+
+### Screenshots
+![Workflow](https://i.imgur.com/A3vDxxT.gif)
+![UI](https://i.imgur.com/WHT5b6k.png)
+![Integration](https://imgur.com/6z9BPOS.gif)
+
+
+### Enhanced Experience
+For a Bitwig Drum Machine-style interface, check out [FX Devices](https://github.com/BryanChi/BryanChi-FX-Devices)
+![FX Devices](https://imgur.com/fP72RYB.png)
