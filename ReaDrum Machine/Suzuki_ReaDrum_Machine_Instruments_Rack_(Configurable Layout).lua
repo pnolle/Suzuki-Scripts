@@ -313,7 +313,18 @@ end
 function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height)
   local a = pad_idx
   notenum = note_num  -- Set as GLOBAL for use in DndAddSample_TARGET and other functions
-  note_name = getNoteName(note_num + midi_oct_offs)  -- Set as GLOBAL for drag-drop functions
+  
+  -- Get current layout for note name formatting
+  local current_layout = GetCurrentLayout()
+  
+  -- Use the layout's custom noteNames if available (indexed by grid position)
+  -- relative_note_global is set by DrawPads before calling this function
+  if relative_note_global ~= nil and current_layout and current_layout.noteNames then
+    note_name = current_layout.noteNames[tostring(relative_note_global)] or LayoutManager_GetNoteName(relative_note_global, current_layout)
+  else
+    -- Fallback to chromatic note names
+    note_name = LayoutManager_GetNoteName(note_num, current_layout)
+  end
   
   im.SetCursorPos(ctx, x, y)
   local ret = im.InvisibleButton(ctx, pad_label .. "##" .. a, pad_width, pad_height)
@@ -321,8 +332,8 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
   -- Determine pad color: use container color if pad exists, otherwise empty/neutral
   local pad_color = (Pad[a] and COLOR["Container"]) or 0x555555ff
   
-  -- Generate the dynamic note label
-  local note_display = getNoteName(note_num) .. " (" .. note_num .. ")"
+  -- Generate the dynamic note label using layout's custom noteNames if available
+  local note_display = note_name .. " (" .. note_num .. ")"
   ButtonDrawlist(pad_label, pad_color, a, note_display)
   
   -- Only do advanced interactions if pad actually exists
@@ -566,7 +577,6 @@ function DrawPads(loopmin, loopmax)
           end
           
           local notenum = final_midi
-          local note_name = getNoteName(notenum + midi_oct_offs)
           
           local pad_name = ""
           if Pad[final_midi + 1] then
@@ -581,6 +591,8 @@ function DrawPads(loopmin, loopmax)
           local x = start_x + (col_idx - 1) * (pad_w + spacing)
           local y = start_y + (row_idx - 1) * -(pad_h + 30 + spacing)  -- 30 = pad (25) + small gap (5)
           
+          -- Set global relative_note for DrawSinglePad to access layout's noteNames
+          relative_note_global = relative_note
           DrawSinglePad(final_midi + 1, notenum, pad_name, x, y, pad_w, pad_h)
           pad_idx = pad_idx + 1
           ::continue_loop::
@@ -591,7 +603,10 @@ function DrawPads(loopmin, loopmax)
     -- Fallback: render pads in fixed 4-column grid
     for a = loopmin, loopmax do
       notenum = a - 1
-      note_name = getNoteName(notenum + midi_oct_offs)
+      
+      -- Compute relative note within octave for layout-specific naming
+      local relative_note = notenum % 12
+      relative_note_global = relative_note
 
       if Pad[a] then
         if Pad[a].Rename then
@@ -608,7 +623,7 @@ function DrawPads(loopmin, loopmax)
       local x = start_x + (a - loopmin) % 4 * 95
       local y = start_y + math.floor((a - loopmin) / 4) * -75
       
-      DrawSinglePad(a, notenum, pad_name, x, y, pad_w, pad_h)
+      DrawSinglePad(a, notenum + midi_oct_offs, pad_name, x, y, pad_w, pad_h)
     end
   end
 end
