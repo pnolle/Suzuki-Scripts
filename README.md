@@ -24,6 +24,7 @@ Comprehensive collection of REAPER Lua scripts for advanced workflow automation,
     - [What is it?](#what-is-it)
     - [How to use](#how-to-use)
     - [Key Files](#key-files)
+    - [Layouts.lua file](#layoutslua-file)
     - [Data Storage](#data-storage)
       - [Sample Assignments \& Pad Data Hierarchy](#sample-assignments--pad-data-hierarchy)
       - [Summary](#summary)
@@ -185,6 +186,11 @@ ReaDrum Machine is a Lua script that transforms REAPER into a powerful beat-maki
   - `Images/` - Icons and graphics
   - `JSFX/` - Custom plugins (e.g., RDM utility)
   - `FXChains/` - Pre-configured effect templates
+
+### Layouts.lua file
+
+noteNames syntax: 
+[notenumber in lowest octave] = 'NoteName'. 
 
 ### Data Storage
 

@@ -549,6 +549,8 @@ function DrawPads(loopmin, loopmax)
     for i = #current_layout.grid, 1, -1 do
       table.insert(reversed_grid, current_layout.grid[i])
     end
+
+    r.ShowConsoleMsg("reversedGrid\n" .. reversed_grid[1][1] .. " | " .. reversed_grid[1][2] .. "\n" .. reversed_grid[2][1] .. " | " .. reversed_grid[2][2] .. " | " .. "\n")
     
     -- Iterate grid positions and render pads in sequence
     for row_idx, row in ipairs(reversed_grid) do
@@ -567,6 +569,8 @@ function DrawPads(loopmin, loopmax)
           
           local notenum = final_midi
           local note_name = getNoteName(notenum + midi_oct_offs)
+
+          r.ShowConsoleMsg("final_midi " .. relative_note .. " | " .. octave_offset .. " | " .. final_midi .. " | " .. note_name .. " | " .. notenum .. "\n")
           
           local pad_name = ""
           if Pad[final_midi + 1] then
