@@ -2359,6 +2359,10 @@ How to use
 Key Files
 }}}
 \par}
+{\pard \ql \f0 \sa0 \li1080 \fi-360 \bullet \tx360\tab {\field{\*\fldinst{HYPERLINK "#layoutslua-file"}}{\fldrslt{\ul
+Layouts.lua file
+}}}
+\par}
 {\pard \ql \f0 \sa0 \li1080 \fi-360 \bullet \tx360\tab {\field{\*\fldinst{HYPERLINK "#data-storage"}}{\fldrslt{\ul
 Data Storage
 }}}
@@ -2523,6 +2527,8 @@ Full Manual
 {\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab {\f1 Images/} - Icons and graphics\par}
 {\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab {\f1 JSFX/} - Custom plugins (e.g., RDM utility)\par}
 {\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab {\f1 FXChains/} - Pre-configured effect templates\sa180\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel2 \b \fs28 Layouts.lua file\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 noteNames syntax: [notenumber in lowest octave] = 'NoteName'.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel2 \b \fs28 Data Storage\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 ReaDrum Machine uses two distinct storage mechanisms:\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 | Aspect | {\b 1. Pad Layout Selection} (per track) | {\b 2. Sample Assignments & Pad Data} (original feature) | |--------|----------------------------------------|--------------------------------------------------------| | {\b Storage Location} | REAPER project file (.RPP) - stored in project's extended state ({\f1 ExtState}) | REAPER track's FX chain | | {\b Storage Method} | {\f1 r.SetProjExtState()} / {\f1 r.GetProjExtState()} | Nested Container and RS5k plugin instances | | {\b Persistence} | \u9989 ? REAPER project file (.RPP) | \u9989 ? REAPER project file (.RPP) | | {\b Key Format} | {\f1 "ReaDrum Machine"} namespace, {\f1 "\{track_guid\}layout"} key | N/A - stored as FX plugin hierarchy, not ext state | | {\b Contents} | Layout ID (e.g., {\f1 "chromatic_3x4"}, {\f1 "alesis_performancepad"}) | Container structure, MIDI note IDs, sample file paths, playback parameters (pitch, start/end offset), choke groups, user-added FX per-pad | | {\b Scope} | Per-track setting - each track in the project remembers which grid layout it uses | Entire track FX chain - survives project save/load | | {\b Module} | {\f1 Modules/LayoutManager.lua} handles all layout persistence via {\f1 LayoutManager_SetLayoutForTrack()} and {\f1 LayoutManager_GetLayoutForTrack()} | Multiple modules ({\f1 DragNDrop.lua}, {\f1 Pad Actions.lua}, {\f1 General Functions.lua}) handle FX chain manipulation; no single module for persistence (handled by REAPER natively) |\par}
