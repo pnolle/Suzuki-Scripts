@@ -24,7 +24,7 @@ return {
         {4, 5, 6, 7},
         {8, 9, 10, 11}
       },
-      comment = "a layout that shows all notes. notenames syntax: [notenumber in lowest octave] = 'NoteName'. This is used for display and also for drag-and-drop sample mapping. Aliases are just for display and have no functional effect.",
+      comment = "a layout that shows all notes.",
       noteNames = {
         ["0"] = "C",   ["1"] = "C#",  ["2"] = "D",   ["3"] = "D#",
         ["4"] = "E",   ["5"] = "F",   ["6"] = "F#",  ["7"] = "G",
@@ -44,7 +44,7 @@ return {
         {3, 4, 5},
         {6, 7, 8}
       },
-      comment = "noteNames correspond what SPD-SX sends in its default configuration. notenames syntax: [notenumber in lowest octave] = 'NoteName'. ",
+      comment = "noteNames correspond what SPD-SX sends in its default configuration.",
       noteNames = {
         ["0"] = "C",   ["1"] = "C#",  ["2"] = "D",
         ["3"] = "D#",  ["4"] = "E",   ["5"] = "F",
@@ -70,23 +70,23 @@ return {
       minPadWidth = 60,
       octaveSpan = 1,
       grid = {
-        {0, 1, 2, 3},
-        {4, 5, 6, 7}
+        {1, 3, 4, 5},
+        {0, 6, 7, 8}
       },
-      comment = "noteNames correspond to the lower two rows of SPD-SX + the leftmost two pads of the top row. Fixed notes from Alesis Pad have to be mapped to these notes via 'JS: MIDI Map To Key v2' to these notes before reaching ReaDrum Machine. notenames syntax: [notenumber in lowest octave] = 'NoteName'. ",
+      comment = "Maps to 8 of the 12 chromatic notes: top-left 2 pads of SPD-SX plus both lower rows",
       noteNames = {
-        ["1"] = "C#",  ["3"] = "D#", ["4"] = "E",  ["5"] = "F",
-        ["0"] = "C",  ["6"] = "F#",  ["7"] = "G", ["8"] = "G#"
+        ["1"] = "C#",   ["3"] = "D#",  ["4"] = "E",   ["5"] = "F",
+        ["0"] = "C",   ["6"] = "F#",  ["7"] = "G",   ["8"] = "G#"
       },
       aliases = {
         ["0"] = "Kick",
         ["1"] = "Perc1",
-        ["2"] = "Snare",
         ["3"] = "Tom1",
         ["4"] = "Tom2",
         ["5"] = "Hihat",
         ["6"] = "Crash",
-        ["7"] = "Ride"
+        ["7"] = "Ride",
+        ["8"] = "Perc2"
       }
     }
   }

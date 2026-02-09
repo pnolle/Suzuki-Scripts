@@ -310,10 +310,26 @@ function DrawListButton(name, color, round_side, icon, hover, offset)
   if icon then im.PopFont(ctx) end
 end
 
-function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height)
+function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height, relative_note)
   local a = pad_idx
   notenum = note_num  -- Set as GLOBAL for use in DndAddSample_TARGET and other functions
-  note_name = getNoteName(note_num + midi_oct_offs)  -- Set as GLOBAL for drag-drop functions
+  
+  -- Get current layout to check for custom note names
+  local current_layout = GetCurrentLayout()
+  
+  -- Use layout-specific note name if available, otherwise use chromatic
+  if relative_note ~= nil and current_layout and current_layout.noteNames then
+    local pitch_class = current_layout.noteNames[tostring(relative_note)]
+    if pitch_class then
+      -- Append octave number to pitch class: MIDI octave = note_num // 12 - 1
+      local octave_num = note_num // 12 - 1
+      note_name = pitch_class .. octave_num
+    else
+      note_name = LayoutManager_GetNoteName(note_num, current_layout)
+    end
+  else
+    note_name = LayoutManager_GetNoteName(note_num, current_layout)
+  end
   
   im.SetCursorPos(ctx, x, y)
   local ret = im.InvisibleButton(ctx, pad_label .. "##" .. a, pad_width, pad_height)
@@ -321,8 +337,8 @@ function DrawSinglePad(pad_idx, note_num, pad_label, x, y, pad_width, pad_height
   -- Determine pad color: use container color if pad exists, otherwise empty/neutral
   local pad_color = (Pad[a] and COLOR["Container"]) or 0x555555ff
   
-  -- Generate the dynamic note label
-  local note_display = getNoteName(note_num) .. " (" .. note_num .. ")"
+  -- Generate the dynamic note label: layout-specific name (with octave) + MIDI number
+  local note_display = note_name .. " (" .. note_num .. ")"
   ButtonDrawlist(pad_label, pad_color, a, note_display)
   
   -- Only do advanced interactions if pad actually exists
@@ -550,8 +566,6 @@ function DrawPads(loopmin, loopmax)
       table.insert(reversed_grid, current_layout.grid[i])
     end
 
-    r.ShowConsoleMsg("reversedGrid\n" .. reversed_grid[1][1] .. " | " .. reversed_grid[1][2] .. "\n" .. reversed_grid[2][1] .. " | " .. reversed_grid[2][2] .. " | " .. "\n")
-    
     -- Iterate grid positions and render pads in sequence
     for row_idx, row in ipairs(reversed_grid) do
       for col_idx, relative_note in ipairs(row) do
@@ -568,10 +582,7 @@ function DrawPads(loopmin, loopmax)
           end
           
           local notenum = final_midi
-          local note_name = getNoteName(notenum + midi_oct_offs)
 
-          r.ShowConsoleMsg("final_midi " .. relative_note .. " | " .. octave_offset .. " | " .. final_midi .. " | " .. note_name .. " | " .. notenum .. "\n")
-          
           local pad_name = ""
           if Pad[final_midi + 1] then
             if Pad[final_midi + 1].Rename then
@@ -585,7 +596,8 @@ function DrawPads(loopmin, loopmax)
           local x = start_x + (col_idx - 1) * (pad_w + spacing)
           local y = start_y + (row_idx - 1) * -(pad_h + 30 + spacing)  -- 30 = pad (25) + small gap (5)
           
-          DrawSinglePad(final_midi + 1, notenum, pad_name, x, y, pad_w, pad_h)
+          -- Pass relative_note to DrawSinglePad for layout-specific name lookup
+          DrawSinglePad(final_midi + 1, notenum, pad_name, x, y, pad_w, pad_h, relative_note)
           pad_idx = pad_idx + 1
           ::continue_loop::
         end
@@ -594,14 +606,14 @@ function DrawPads(loopmin, loopmax)
   else
     -- Fallback: render pads in fixed 4-column grid
     for a = loopmin, loopmax do
-      notenum = a - 1
-      note_name = getNoteName(notenum + midi_oct_offs)
+      local relative_note = (a - 1) % 12  -- Compute relative note within octave for layout lookup
+      notenum = (a - 1) + (octave_offset * 12)  -- Add octave offset to get actual MIDI note
 
-      if Pad[a] then
-        if Pad[a].Rename then
-          pad_name = Pad[a].Rename
-        elseif Pad[a].Name then
-          pad_name = Pad[a].Name
+      if Pad[notenum + 1] then
+        if Pad[notenum + 1].Rename then
+          pad_name = Pad[notenum + 1].Rename
+        elseif Pad[notenum + 1].Name then
+          pad_name = Pad[notenum + 1].Name
         else
           pad_name = ""
         end
@@ -612,7 +624,8 @@ function DrawPads(loopmin, loopmax)
       local x = start_x + (a - loopmin) % 4 * 95
       local y = start_y + math.floor((a - loopmin) / 4) * -75
       
-      DrawSinglePad(a, notenum, pad_name, x, y, pad_w, pad_h)
+      -- Pass notenum + 1 as pad_idx (for Pad lookup), and notenum as the MIDI note
+      DrawSinglePad(notenum + 1, notenum, pad_name, x, y, pad_w, pad_h, relative_note)
     end
   end
 end
