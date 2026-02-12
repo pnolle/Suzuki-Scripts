@@ -958,15 +958,28 @@ function RS5kUI(a)
 end
 
 local function GetMidiRouterOctaveValue(track)
+  if not track then
+    r.ShowConsoleMsg("DEBUG: track is nil\n")
+    return nil
+  end
+  
   local fx_count = r.TrackFX_GetCount(track)
+  r.ShowConsoleMsg("DEBUG: FX count on track: " .. fx_count .. "\n")
+  
   for fx_idx = 0, fx_count - 1 do
     local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
-    if fx_name and fx_name:find("MIDI_Router_octaves") then
+    r.ShowConsoleMsg("DEBUG: FX " .. fx_idx .. " = " .. (fx_name or "nil") .. "\n")
+    
+    if fx_name and fx_name:find("JS: MIDI Router/Transpose full octave") then
+      r.ShowConsoleMsg("DEBUG: Found JS: MIDI Router/Transpose full octave at index " .. fx_idx .. "\n")
       local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
+      r.ShowConsoleMsg("DEBUG: Parameter 5 value = " .. (octave_value or "nil") .. "\n")
       return tonumber(octave_value) or 0
     end
   end
-  return nil -- Not found
+  
+  r.ShowConsoleMsg("DEBUG: JS: MIDI Router/Transpose full octave not found\n")
+  return nil
 end
 
 function CustomTitleBar(button_pos)
