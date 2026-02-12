@@ -971,6 +971,22 @@ function CustomTitleBar(button_pos)
       header_text = header_text .. " | " .. cache_current_layout.name
     end
     im.Text(ctx, header_text)
+
+    -- local rv, preset_name = r.GetProjExtState(0, "ReaDrum Machine", "preset")
+    -- r.ShowConsoleMsg("Preset name from ext state: " .. (preset_name or "nil") .. "\n")
+
+    -- -- Display Octave Name from preset metadata
+    -- if r and r.GetProjExtState then
+    --   local rv, preset_name = r.GetProjExtState(0, "ReaDrum Machine", "Preset")
+    --   if LAST_MENU and preset_name and preset_name ~= "" then
+    --     local octave_name = get_octave_name(preset_name, LAST_MENU)
+    --     if octave_name then
+    --         im.SameLine(ctx)
+    --         im.Text(ctx, "- " .. octave_name)
+    --     end
+    --   end
+    -- end
+
     im.PopFont(ctx)
   end
   im.SameLine(ctx, button_pos)

@@ -53,6 +53,19 @@ package.path                 = debug.getinfo(1, "S").source:match [[^@?(.*[\/])[
 
 script_path = r.GetResourcePath() .. "/Scripts/Suzuki Scripts/ReaDrum Machine/"
 
+local preset_metadata = {}
+local preset_metadata_file = script_path .. "LayoutConfigs/presetMetadata.lua"
+if r.file_exists(preset_metadata_file) then
+  preset_metadata = dofile(preset_metadata_file)
+end
+
+function get_octave_name(preset_name, octave)
+  if preset_metadata and preset_metadata.presets and preset_metadata.presets[preset_name] and preset_metadata.presets[preset_name].octaves and preset_metadata.presets[preset_name].octaves[octave] then
+    return preset_metadata.presets[preset_name].octaves[octave].name
+  end
+  return nil
+end
+
 --[[local profiler = dofile(r.GetResourcePath() ..
   '/Scripts/ReaTeam Scripts/Development/cfillion_Lua profiler.lua')
 reaper.defer = profiler.defer]]
