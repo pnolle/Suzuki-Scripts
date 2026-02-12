@@ -957,32 +957,31 @@ function RS5kUI(a)
   ParameterSwitchIcon(a, "Round-Robin", 20)  
 end
 
-local function GetMidiRouterOctaveValue(track)
-  if not track then
-    r.ShowConsoleMsg("DEBUG: track is nil\n")
-    return nil
+-- Get song name based on selected octave from MIDI Router/Transpose full octave JS FX, using preset metadata
+function GetOctaveName(preset_metadata, preset_name, octave)
+  if preset_metadata and preset_metadata.presets and preset_metadata.presets[preset_name] and preset_metadata.presets[preset_name].octaves and preset_metadata.presets[preset_name].octaves[octave] then
+    return preset_metadata.presets[preset_name].octaves[octave].name
   end
-  
-  local fx_count = r.TrackFX_GetCount(track)
-  r.ShowConsoleMsg("DEBUG: FX count on track: " .. fx_count .. "\n")
-  
-  for fx_idx = 0, fx_count - 1 do
-    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
-    r.ShowConsoleMsg("DEBUG: FX " .. fx_idx .. " = " .. (fx_name or "nil") .. "\n")
-    
-    if fx_name and fx_name:find("JS: MIDI Router/Transpose full octave") then
-      r.ShowConsoleMsg("DEBUG: Found JS: MIDI Router/Transpose full octave at index " .. fx_idx .. "\n")
-      local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
-      r.ShowConsoleMsg("DEBUG: Parameter 5 value = " .. (octave_value or "nil") .. "\n")
-      return tonumber(octave_value) or 0
-    end
-  end
-  
-  r.ShowConsoleMsg("DEBUG: JS: MIDI Router/Transpose full octave not found\n")
   return nil
 end
 
-function CustomTitleBar(button_pos)
+-- Function to get the octave transpose value from the MIDI Router/Transpose full octave JS FX
+local function GetMidiRouterOctaveValue(track)
+  if not track then
+    return nil
+  end
+  local fx_count = r.TrackFX_GetCount(track)
+  for fx_idx = 0, fx_count - 1 do
+    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
+    if fx_name and fx_name:find("JS: MIDI Router/Transpose full octave") then
+      local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
+      return tonumber(octave_value) or 0
+    end
+  end
+  return nil
+end
+
+function CustomTitleBar(preset_metadata, button_pos)
   im.BeginGroup(ctx)
   im.PushFont(ctx, antonio_semibold_large)
   im.Text(ctx, "ReaDrum Machine")
@@ -999,22 +998,14 @@ function CustomTitleBar(button_pos)
 
     -- Display song name, derived from octave selected in JS FX "MIDI_Router_octaves"
     local octave_transpose = GetMidiRouterOctaveValue(track)
-    r.ShowConsoleMsg("Current MIDI Router Octave Value: " .. (octave_transpose or "nil") .. "\n")
-
-    -- local rv, preset_name = r.GetProjExtState(0, "ReaDrum Machine", "preset")
-    -- r.ShowConsoleMsg("Preset name from ext state: " .. (preset_name or "nil") .. "\n")
-
-    -- -- Display Octave Name from preset metadata
-    -- if r and r.GetProjExtState then
-    --   local rv, preset_name = r.GetProjExtState(0, "ReaDrum Machine", "Preset")
-    --   if LAST_MENU and preset_name and preset_name ~= "" then
-    --     local octave_name = get_octave_name(preset_name, LAST_MENU)
-    --     if octave_name then
-    --         im.SameLine(ctx)
-    --         im.Text(ctx, "- " .. octave_name)
-    --     end
-    --   end
-    -- end
+    if preset_metadata and preset_metadata["Snippetu_Set2026"] and preset_metadata["Snippetu_Set2026"]["octaves"] and preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose] and preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose]["name"] then
+      r.ShowConsoleMsg("Current MIDI Router Octave Value: " .. (octave_transpose or "nil") .. "\n")
+      r.ShowConsoleMsg("preset_metadata: " .. preset_metadata["Snippetu_Set2026"]["octaves"][-1]["name"] .. "\n")
+      local octave_name = preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose]["name"]
+      r.ShowConsoleMsg("Octave name: " .. octave_name .. "\n")
+      im.SameLine(ctx)
+      im.Text(ctx, "- " .. octave_name)
+    end
 
     im.PopFont(ctx)
   end
