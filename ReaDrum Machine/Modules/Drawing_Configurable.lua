@@ -957,14 +957,6 @@ function RS5kUI(a)
   ParameterSwitchIcon(a, "Round-Robin", 20)  
 end
 
--- Get song name based on selected octave from MIDI Router/Transpose full octave JS FX, using preset metadata
-function GetOctaveName(preset_metadata, preset_name, octave)
-  if preset_metadata and preset_metadata.presets and preset_metadata.presets[preset_name] and preset_metadata.presets[preset_name].octaves and preset_metadata.presets[preset_name].octaves[octave] then
-    return preset_metadata.presets[preset_name].octaves[octave].name
-  end
-  return nil
-end
-
 -- Function to get the octave transpose value from the MIDI Router/Transpose full octave JS FX
 local function GetMidiRouterOctaveValue(track)
   if not track then

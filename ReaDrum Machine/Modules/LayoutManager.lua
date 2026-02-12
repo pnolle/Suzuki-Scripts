@@ -196,21 +196,6 @@ function LayoutManager_SetScaleForTrack(track_obj, scale)
   return true
 end
 
--- -- Get active layout for current track (returns layout table or nil)
--- function LayoutManager_GetActiveLayout(track_obj, layouts_data)
---   if not layouts_data or not layouts_data.layouts then
---     return nil, "No layouts data loaded"
---   end
-  
---   local layout_id = LayoutManager_GetLayoutForTrack(track_obj) or layouts_data.defaultLayout
-  
---   if not layout_id or not layouts_data.layouts[layout_id] then
---     return nil, "Layout '" .. (layout_id or "unknown") .. "' not found"
---   end
-  
---   return layouts_data.layouts[layout_id], layout_id
--- end
-
 -- List all available layouts
 function LayoutManager_GetAvailableLayouts(layouts_data)
   if not layouts_data or not layouts_data.layouts then
