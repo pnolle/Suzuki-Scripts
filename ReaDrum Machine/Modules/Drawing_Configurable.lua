@@ -997,12 +997,10 @@ function CustomTitleBar(preset_metadata, button_pos)
     im.Text(ctx, header_text)
 
     -- Display song name, derived from octave selected in JS FX "MIDI_Router_octaves"
+    local preset_name = "Snippetu_Set2026"
     local octave_transpose = GetMidiRouterOctaveValue(track)
-    if preset_metadata and preset_metadata["Snippetu_Set2026"] and preset_metadata["Snippetu_Set2026"]["octaves"] and preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose] and preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose]["name"] then
-      r.ShowConsoleMsg("Current MIDI Router Octave Value: " .. (octave_transpose or "nil") .. "\n")
-      r.ShowConsoleMsg("preset_metadata: " .. preset_metadata["Snippetu_Set2026"]["octaves"][-1]["name"] .. "\n")
-      local octave_name = preset_metadata["Snippetu_Set2026"]["octaves"][octave_transpose]["name"]
-      r.ShowConsoleMsg("Octave name: " .. octave_name .. "\n")
+    if preset_metadata and preset_metadata[preset_name] and preset_metadata[preset_name][octave_transpose] then
+      local octave_name = preset_metadata[preset_name][octave_transpose]
       im.SameLine(ctx)
       im.Text(ctx, "- " .. octave_name)
     end

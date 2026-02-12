@@ -19,10 +19,8 @@
 
 presets = {
   ["Snippetu_Set2026"] = {
-    octaves = {
-      [-1] = { name = "AerialCrypto" },
-      [0] = { name = "SoundDist" }
-    }
+      [-1] = "AerialCrypto",
+      [0] = "SoundDist"
   }
 }
 
