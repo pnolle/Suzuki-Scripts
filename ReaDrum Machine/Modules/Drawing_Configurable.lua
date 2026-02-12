@@ -957,6 +957,18 @@ function RS5kUI(a)
   ParameterSwitchIcon(a, "Round-Robin", 20)  
 end
 
+local function GetMidiRouterOctaveValue(track)
+  local fx_count = r.TrackFX_GetCount(track)
+  for fx_idx = 0, fx_count - 1 do
+    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
+    if fx_name and fx_name:find("MIDI_Router_octaves") then
+      local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
+      return tonumber(octave_value) or 0
+    end
+  end
+  return nil -- Not found
+end
+
 function CustomTitleBar(button_pos)
   im.BeginGroup(ctx)
   im.PushFont(ctx, antonio_semibold_large)
@@ -971,6 +983,10 @@ function CustomTitleBar(button_pos)
       header_text = header_text .. " | " .. cache_current_layout.name
     end
     im.Text(ctx, header_text)
+
+    -- Display song name, derived from octave selected in JS FX "MIDI_Router_octaves"
+    local octave_transpose = GetMidiRouterOctaveValue(track)
+    r.ShowConsoleMsg("Current MIDI Router Octave Value: " .. (octave_transpose or "nil") .. "\n")
 
     -- local rv, preset_name = r.GetProjExtState(0, "ReaDrum Machine", "preset")
     -- r.ShowConsoleMsg("Preset name from ext state: " .. (preset_name or "nil") .. "\n")
