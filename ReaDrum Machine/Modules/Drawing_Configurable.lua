@@ -973,6 +973,42 @@ local function GetMidiRouterOctaveValue(track)
   return nil
 end
 
+local function GetContainerPresetName(track)
+  local fx_count = r.TrackFX_GetCount(track)
+  for fx_idx = 0, fx_count - 1 do
+    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
+    r.ShowConsoleMsg("Checking FX: " .. (fx_name or "nil") .. "\n")
+    -- Checking FX: ReaDrum Machine at index 3
+    
+    -- Try to match the Container or ReaDrum Machine itself
+    if fx_name and fx_name == "ReaDrum Machine" then
+      local rv, preset_name = r.TrackFX_GetPreset(track, fx_idx)
+      r.ShowConsoleMsg("Preset name: " .. preset_name .. "\n")
+
+      -- Get the preset name from this FX
+      local rv, num_params = r.TrackFX_GetNumParams(track, fx_idx)
+      for np = 0, 100 do
+        local _, param_name = r.TrackFX_GetParamName(track, fx_idx, np)
+        r.ShowConsoleMsg("Param " .. tostring(np) .. ": " .. (param_name or "nil") .. "\n")
+        np = np + 1
+      end
+      local rv, preset_name = r.TrackFX_GetParamName(track, fx_idx, 0)
+      r.ShowConsoleMsg(tostring(num_params))
+      r.ShowConsoleMsg(" / preset: " .. preset_name .. "\n")
+      if preset_name and preset_name ~= "" then
+        r.ShowConsoleMsg("Found preset: " .. preset_name .. "\n")
+        return preset_name
+      end
+      -- if preset_idx >= 0 then
+      --   local _, preset_name = r.TrackFX_GetPresetName(track, fx_idx, preset_idx)
+      --   r.ShowConsoleMsg("Found preset: " .. (preset_name or "nil") .. " at FX index " .. fx_idx .. "\n")
+      --   return preset_name
+      -- end
+    end
+  end
+  return nil
+end
+
 function CustomTitleBar(preset_metadata, button_pos)
   im.BeginGroup(ctx)
   im.PushFont(ctx, antonio_semibold_large)
@@ -987,6 +1023,9 @@ function CustomTitleBar(preset_metadata, button_pos)
       header_text = header_text .. " | " .. cache_current_layout.name
     end
     im.Text(ctx, header_text)
+
+    local cpname = GetContainerPresetName(track)
+    r.ShowConsoleMsg("Container preset name: " .. (cpname or "nil") .. "\n")
 
     -- Display song name, derived from octave selected in JS FX "MIDI_Router_octaves"
     local preset_name = "Snippetu_Set2026"
