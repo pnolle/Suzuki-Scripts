@@ -974,39 +974,10 @@ local function GetMidiRouterOctaveValue(track)
 end
 
 local function GetContainerPresetName(track)
-  local fx_count = r.TrackFX_GetCount(track)
-  for fx_idx = 0, fx_count - 1 do
-    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
-    r.ShowConsoleMsg("Checking FX: " .. (fx_name or "nil") .. "\n")
-    -- Checking FX: ReaDrum Machine at index 3
-    
-    -- Try to match the Container or ReaDrum Machine itself
-    if fx_name and fx_name == "ReaDrum Machine" then
-      local rv, preset_name = r.TrackFX_GetPreset(track, fx_idx)
-      r.ShowConsoleMsg("Preset name: " .. preset_name .. "\n")
-
-      -- Get the preset name from this FX
-      local rv, num_params = r.TrackFX_GetNumParams(track, fx_idx)
-      for np = 0, 100 do
-        local _, param_name = r.TrackFX_GetParamName(track, fx_idx, np)
-        r.ShowConsoleMsg("Param " .. tostring(np) .. ": " .. (param_name or "nil") .. "\n")
-        np = np + 1
-      end
-      local rv, preset_name = r.TrackFX_GetParamName(track, fx_idx, 0)
-      r.ShowConsoleMsg(tostring(num_params))
-      r.ShowConsoleMsg(" / preset: " .. preset_name .. "\n")
-      if preset_name and preset_name ~= "" then
-        r.ShowConsoleMsg("Found preset: " .. preset_name .. "\n")
-        return preset_name
-      end
-      -- if preset_idx >= 0 then
-      --   local _, preset_name = r.TrackFX_GetPresetName(track, fx_idx, preset_idx)
-      --   r.ShowConsoleMsg("Found preset: " .. (preset_name or "nil") .. " at FX index " .. fx_idx .. "\n")
-      --   return preset_name
-      -- end
-    end
-  end
-  return nil
+  -- Adds or queries the position of a named FX from the track FX chain (recFX=false) or record input FX/monitoring FX (recFX=true, monitoring FX are on master track). Specify 0 to only query the first instance of an effect instead of adding it. 
+  local fx_idx = r.TrackFX_AddByName(track, "ReaDrum Machine", false, 0)
+  local rv, preset_name = r.TrackFX_GetPreset(track, fx_idx)
+  return preset_name
 end
 
 function CustomTitleBar(preset_metadata, button_pos)
