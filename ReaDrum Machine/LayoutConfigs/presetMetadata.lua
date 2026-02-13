@@ -20,7 +20,8 @@
 presets = {
   ["Snippetu_Set2026"] = {
       [-1] = "AerialCrypto",
-      [0] = "SoundDist"
+      [0] = "SoundDist",
+      [4] = "CLB"
   }
 }
 
