@@ -1014,12 +1014,16 @@ function CustomTitleBar(preset_metadata, button_pos)
   im.PopFont(ctx)
 end
 im.SameLine(ctx, button_pos - 50)
-im.PushStyleColor(ctx, im.Col_Button, 0x99999900)
-im.PushStyleColor(ctx, im.Col_ButtonHovered, 0x9999993c)
-im.PushStyleColor(ctx, im.Col_ButtonActive, 0x9999996f)
+
+-- Edit/Play mode toggle button -- color info is 0xRRGGBBAA
+im.PushStyleColor(ctx, im.Col_Button, is_edit_mode and 0xFF000099 or 0x009900FF)
+im.PushStyleColor(ctx, im.Col_ButtonHovered, is_edit_mode and 0xFF666699 or 0x669966FF)
+im.PushStyleColor(ctx, im.Col_ButtonActive, is_edit_mode and 0xFF0000BB or 0x00BB00FF)
 if im.Button(ctx, is_edit_mode and "EDIT" or "PLAY", 40, 22) then
   is_edit_mode = not is_edit_mode
 end
+
+-- Settings menu button
 im.PopStyleColor(ctx, 3)
 im.SameLine(ctx, button_pos)
 im.PushStyleColor(ctx, im.Col_Button, 0x99999900)

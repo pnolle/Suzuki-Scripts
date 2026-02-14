@@ -707,7 +707,6 @@ function RenderOctaveButtons(start_x)
         end
       end
     end
-
     
     -- In play mode, get octave from JSFX "MIDI_Router_octaves" in FxChain
     if not is_edit_mode then
