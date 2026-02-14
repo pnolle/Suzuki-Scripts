@@ -698,16 +698,14 @@ function RenderOctaveButtons(start_x)
         end
       end
     end
-    
-    if is_edit_mode then
-      -- Handle button click - change displayed octave
-      if rv then
-        LAST_MENU = octave
-        r.SetProjExtState(0, "ReaDrum Machine", track_guid .. "LAST_MENU", tostring(octave))
-      end
-    else
-      -- Change displayed octave according to octave value from JSFX "MIDI_Router_octaves" in FxChain
+
+    -- In play mode, get octave from JSFX "MIDI_Router_octaves" in FxChain
+    if not is_edit_mode then
       octave = GetMidiRouterOctaveValue(track)
+    end
+    
+    -- Set octave display if octave button is clicked in edit mode or if we're in play mode
+    if (is_edit_mode and rv) or not is_edit_mode then
       LAST_MENU = octave
       r.SetProjExtState(0, "ReaDrum Machine", track_guid .. "LAST_MENU", tostring(octave))
     end
