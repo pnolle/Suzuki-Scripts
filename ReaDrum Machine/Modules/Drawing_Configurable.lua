@@ -970,7 +970,7 @@ function GetMidiRouterOctaveValue(track)
   end
 
   local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
-  return tonumber(octave_value) or 0
+  return math.tointeger(tonumber(octave_value)) or 0
 end
 
 local function GetContainerPresetName(track)

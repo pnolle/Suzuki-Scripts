@@ -654,6 +654,11 @@ local w_open, w_closed = 250, def_btn_h + (s_window_x * 2)
 ----------------------------------------------------------------------
 -- RenderOctaveButtons() - Render left sidebar with all octaves
 ----------------------------------------------------------------------
+function SetOctaveDisplay(set_octave)
+  LAST_MENU = set_octave
+  r.SetProjExtState(0, "ReaDrum Machine", track_guid .. "LAST_MENU", tostring(set_octave))
+end
+
 function RenderOctaveButtons(start_x)
   local current_layout = GetCurrentLayout()
   if not current_layout then return end
@@ -661,6 +666,10 @@ function RenderOctaveButtons(start_x)
   draw_list = im.GetWindowDrawList(ctx)
     -- Add space at top so selection border doesn't get clipped
   im.Spacing(ctx)
+
+  -- get octave value from JSFX "MIDI_Router_octaves" in FxChain for current track (defaults to 2 if not set, which is standard piano octave 4)
+  jsfx_octave = GetMidiRouterOctaveValue(track)
+
     -- 11 buttons for octaves 9 to -1 (full MIDI range 0-127)
   -- Render in reverse order so 9 is at top, -1 at bottom
   for octave = 9, -1, -1 do
@@ -699,15 +708,14 @@ function RenderOctaveButtons(start_x)
       end
     end
 
+    
     -- In play mode, get octave from JSFX "MIDI_Router_octaves" in FxChain
     if not is_edit_mode then
-      octave = GetMidiRouterOctaveValue(track)
+      SetOctaveDisplay(jsfx_octave)
     end
-    
-    -- Set octave display if octave button is clicked in edit mode or if we're in play mode
-    if (is_edit_mode and rv) or not is_edit_mode then
-      LAST_MENU = octave
-      r.SetProjExtState(0, "ReaDrum Machine", track_guid .. "LAST_MENU", tostring(octave))
+    -- In edit mode, set octave display if octave button is clicked
+    if (is_edit_mode and rv) then
+      SetOctaveDisplay(octave)
     end
     
     -- Drag & drop support
