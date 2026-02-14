@@ -958,7 +958,7 @@ function RS5kUI(a)
 end
 
 -- Function to get the octave transpose value from "JS: MIDI Router/Transpose full octave". If that JS FX is not present on the track, it will be added.
-local function GetMidiRouterOctaveValue(track)
+function GetMidiRouterOctaveValue(track)
   -- https://www.reaper.fm/sdk/reascript/reascripthelp.html#TrackFX_AddByName
   -- Queries the position of a named FX from the track FX chain (recFX=false) or record input FX/monitoring FX (recFX=true, monitoring FX are on master track). Doesn't support adding the FX to a certain position in the chain, so we just specify 0 to query the first instance of it. 
   local fx_idx = r.TrackFX_AddByName(track, "JS: MIDI Router/Transpose full octave", false, 0)
@@ -996,7 +996,7 @@ function CustomTitleBar(preset_metadata, button_pos)
   end
   im.Text(ctx, header_text)
 
-  -- Display name of octave selected in JS FX "MIDI_Router_octaves"
+  -- Display name of octave selected in JSFX "MIDI_Router_octaves"
   local preset_name = GetContainerPresetName(track)
   local octave_transpose
   if is_edit_mode then
