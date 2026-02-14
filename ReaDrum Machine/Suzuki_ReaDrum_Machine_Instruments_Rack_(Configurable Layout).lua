@@ -180,6 +180,8 @@ local cache_current_layout = nil       -- Cached layout table
 local cache_layout_id = nil            -- Cached layout ID string (loaded at track change only)
 local cache_pad_data_valid = false     -- Track if Pad[] is current
 
+is_edit_mode = true -- Global for edit/play mode
+
 require("Modules/LayoutManager")
 require("Modules/DragNDrop")
 require("Modules/Drawing_Configurable")

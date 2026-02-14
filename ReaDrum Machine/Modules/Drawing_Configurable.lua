@@ -988,35 +988,49 @@ function CustomTitleBar(preset_metadata, button_pos)
   im.PopFont(ctx)
   if track then
     im.SameLine(ctx)
-    im.PushFont(ctx, antonio_light)
-    -- Display track name | layout name (use cached layout, zero function calls)
-    local header_text = track_name
-    if cache_current_layout and cache_current_layout.name then
-      header_text = header_text .. " | " .. cache_current_layout.name
-    end
-    im.Text(ctx, header_text)
-
-    -- Display name of octave selected in JS FX "MIDI_Router_octaves"
-    local preset_name = GetContainerPresetName(track)
-    local octave_transpose = GetMidiRouterOctaveValue(track)
-    if preset_metadata and preset_metadata[preset_name] and preset_metadata[preset_name][octave_transpose] then
-      local octave_name = preset_metadata[preset_name][octave_transpose]
-      im.SameLine(ctx)
-      im.Text(ctx, "- " .. octave_name)
-    end
-
-    im.PopFont(ctx)
+  im.PushFont(ctx, antonio_light)
+  -- Display track name | layout name (use cached layout, zero function calls)
+  local header_text = track_name
+  if cache_current_layout and cache_current_layout.name then
+    header_text = header_text .. " | " .. cache_current_layout.name
   end
-  im.SameLine(ctx, button_pos)
-  im.PushStyleColor(ctx, im.Col_Button,        0x99999900)
-  im.PushStyleColor(ctx, im.Col_ButtonHovered, 0x9999993c)
-  im.PushStyleColor(ctx, im.Col_ButtonActive,  0x9999996f)
-  local rv = im.Button(ctx, "##settings", 22, 22)
-  DrawListButton("$", 0x00, nil, true)
-  im.PopStyleColor(ctx, 3)
-  if rv then
-    im.OpenPopup(ctx, "Settings")
+  im.Text(ctx, header_text)
+
+  -- Display name of octave selected in JS FX "MIDI_Router_octaves"
+  local preset_name = GetContainerPresetName(track)
+  local octave_transpose
+  if is_edit_mode then
+    octave_transpose = LAST_MENU
+  else
+    octave_transpose = GetMidiRouterOctaveValue(track)
   end
+
+  if preset_metadata and preset_metadata[preset_name] and preset_metadata[preset_name][octave_transpose] then
+    local octave_name = preset_metadata[preset_name][octave_transpose]
+    im.SameLine(ctx)
+    im.Text(ctx, "- " .. octave_name)
+  end
+
+  im.PopFont(ctx)
+end
+im.SameLine(ctx, button_pos - 50)
+im.PushStyleColor(ctx, im.Col_Button, 0x99999900)
+im.PushStyleColor(ctx, im.Col_ButtonHovered, 0x9999993c)
+im.PushStyleColor(ctx, im.Col_ButtonActive, 0x9999996f)
+if im.Button(ctx, is_edit_mode and "EDIT" or "PLAY", 40, 22) then
+  is_edit_mode = not is_edit_mode
+end
+im.PopStyleColor(ctx, 3)
+im.SameLine(ctx, button_pos)
+im.PushStyleColor(ctx, im.Col_Button, 0x99999900)
+im.PushStyleColor(ctx, im.Col_ButtonHovered, 0x9999993c)
+im.PushStyleColor(ctx, im.Col_ButtonActive, 0x9999996f)
+local rv = im.Button(ctx, "##settings", 22, 22)
+DrawListButton("$", 0x00, nil, true)
+im.PopStyleColor(ctx, 3)
+if rv then
+  im.OpenPopup(ctx, "Settings")
+end
   if im.BeginPopup(ctx, "Settings", im.WindowFlags_NoMove) then
     _, pitch_as_parameter = im.Checkbox(ctx, "Apply Pitch as RS5k Parameter", pitch_as_parameter)
     
