@@ -957,23 +957,24 @@ function RS5kUI(a)
   ParameterSwitchIcon(a, "Round-Robin", 20)  
 end
 
--- Function to get the octave transpose value from the MIDI Router/Transpose full octave JS FX
+-- Function to get the octave transpose value from "JS: MIDI Router/Transpose full octave". If that JS FX is not present on the track, it will be added.
 local function GetMidiRouterOctaveValue(track)
-  if not track then
-    return nil
+  -- https://www.reaper.fm/sdk/reascript/reascripthelp.html#TrackFX_AddByName
+  -- Queries the position of a named FX from the track FX chain (recFX=false) or record input FX/monitoring FX (recFX=true, monitoring FX are on master track). Doesn't support adding the FX to a certain position in the chain, so we just specify 0 to query the first instance of it. 
+  local fx_idx = r.TrackFX_AddByName(track, "JS: MIDI Router/Transpose full octave", false, 0)
+  local rd_idx = r.TrackFX_AddByName(track, "ReaDrum Machine", false, 0)
+
+  -- if ReaDrum Machine exists on this track but "JS: MIDI Router/Transpose full octave" is not found: add to FxChain before ReaDrum Machine
+  if rd_idx > 0 and fx_idx < 0 then
+    fx_idx = r.TrackFX_AddByName(track, "JS: MIDI Router/Transpose full octave", false, -1000-rd_idx)
   end
-  local fx_count = r.TrackFX_GetCount(track)
-  for fx_idx = 0, fx_count - 1 do
-    local rv, fx_name = r.TrackFX_GetFXName(track, fx_idx)
-    if fx_name and fx_name:find("JS: MIDI Router/Transpose full octave") then
-      local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
-      return tonumber(octave_value) or 0
-    end
-  end
-  return nil
+
+  local _, octave_value = r.TrackFX_GetFormattedParamValue(track, fx_idx, 5)
+  return tonumber(octave_value) or 0
 end
 
 local function GetContainerPresetName(track)
+  -- https://www.reaper.fm/sdk/reascript/reascripthelp.html#TrackFX_AddByName
   -- Adds or queries the position of a named FX from the track FX chain (recFX=false) or record input FX/monitoring FX (recFX=true, monitoring FX are on master track). Specify 0 to only query the first instance of an effect instead of adding it. 
   local fx_idx = r.TrackFX_AddByName(track, "ReaDrum Machine", false, 0)
   local rv, preset_name = r.TrackFX_GetPreset(track, fx_idx)
@@ -995,11 +996,8 @@ function CustomTitleBar(preset_metadata, button_pos)
     end
     im.Text(ctx, header_text)
 
-    local cpname = GetContainerPresetName(track)
-    r.ShowConsoleMsg("Container preset name: " .. (cpname or "nil") .. "\n")
-
-    -- Display song name, derived from octave selected in JS FX "MIDI_Router_octaves"
-    local preset_name = "Snippetu_Set2026"
+    -- Display name of octave selected in JS FX "MIDI_Router_octaves"
+    local preset_name = GetContainerPresetName(track)
     local octave_transpose = GetMidiRouterOctaveValue(track)
     if preset_metadata and preset_metadata[preset_name] and preset_metadata[preset_name][octave_transpose] then
       local octave_name = preset_metadata[preset_name][octave_transpose]
